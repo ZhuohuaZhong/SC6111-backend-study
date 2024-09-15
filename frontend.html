@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Website</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+
+    <!-- CoreUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.1.2/dist/css/coreui.min.css"
+      rel="stylesheet"
+      integrity="sha384-lBISJVJ49zh34fnUuAaSAyuYzQ2ioGvhm4As4Z1JFde0kVpaC1FFWD3f9adpZrdD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.1.2/dist/js/coreui.bundle.min.js"
+      integrity="sha384-yoEOGIfJg9mO8eOS9dgSYBXwb2hCCE+AMiJYavhAofzm8AoyVE241kjON695K1v5"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        "
+      >
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">Login</h5>
+            <div class="input-group input-group" style="margin-top: 20px">
+              <span class="input-group-text" style="width: 100px">Name</span>
+              <input id="nameInput" type="text" class="form-control" />
+            </div>
+            <div class="input-group input-group" style="margin-top: 20px">
+              <span class="input-group-text" style="width: 100px"
+                >Password</span
+              >
+              <input id="passwordInput" type="text" class="form-control" />
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+              <button id="loginButton" class="btn btn-primary" type="submit">
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function () {
+    $("#loginButton").click(function () {
+      var name = $("#nameInput").val();
+      var password = $("#passwordInput").val();
+
+      console.log("Name: " + name);
+      console.log("Password: " + password);
+
+      $.ajax({
+        url: "http://127.0.0.1:8080/login",
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify({
+          name: name,
+          password: password,
+        }),
+        success: function (response) {
+          alert("Response: " + response.status);
+          console.log("Response: ", response.status);
+        },
+        error: function (xhr, status, error) {
+          alert("Error:", error);
+          console.error("Error: ", error);
+        },
+      });
+    });
+  });
+</script>
