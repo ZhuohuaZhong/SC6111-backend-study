@@ -53,11 +53,19 @@ $(document).ready(function () {
           username: username,
           password: password,
         }),
+        // request success
         success: function (response) {
           console.log("[Sign up] Response status: ", response.status);
           console.log("[Sign up] Response msg: ", response.msg);
           alert(response.status + ": " + response.msg);
+
+          // if sign up success, redirect to login page and clear input in sign up page
+          if (response.status == "Success") {
+            changeLayoutToLogin();
+            clearSignUpInput();
+          }
         },
+        // request fail
         error: function (error) {
           console.error("[Sign up] Frontend error: ", error);
           alert("Frontend error:", error);
@@ -72,15 +80,34 @@ $(document).ready(function () {
   });
 
   $("#changeLayoutToSignUp").click(function () {
-    $("#loginPage").hide();
-    $("#signUpPage").show();
+    changeLayoutToSignUp();
+    clearLoginInput();
   });
 
   $("#changeLayoutToLogin").click(function () {
+    changeLayoutToLogin();
+    clearSignUpInput();
+  });
+
+  function changeLayoutToSignUp() {
+    $("#loginPage").hide();
+    $("#signUpPage").show();
+  }
+
+  function changeLayoutToLogin() {
     $("#loginPage").show();
     $("#signUpPage").hide();
-  });
-  //   $("#signUpChangeLayout").click(function (){
+  }
 
-  //   });
+  function clearSignUpInput() {
+    $("#signUpNameInput").val("");
+    $("#signUpPasswordInput").val("");
+    $("#signUpConfirmPasswordInput").val("");
+  }
+
+  function clearLoginInput() {
+    $("#loginNameInput").val("");
+    $("#loginPasswordInput").val("");
+    $("#loginRememberCheck").prop("checked", false);
+  }
 });
