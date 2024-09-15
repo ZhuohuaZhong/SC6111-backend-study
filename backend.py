@@ -17,25 +17,61 @@ connection = pymysql.connect(
 
 @app.route('/login', methods=['POST'])
 def login():
+    print("----------[Login]----------")
     data = request.get_json()
 
-    name = data.get('name')
+    username = data.get('username')
     password = data.get('password')
+    isRemember = data.get('isRemember')
 
-    print(f'Received Name: {name}')
-    print(f'Received Password: {password}')
+    print(f'[Login] Received username: {username}')
+    print(f'[Login] Received password: {password}')
+    print(f'[Login] Received isRemember: {isRemember}')
 
-    status = 'Fail'
+    try:
+        with connection.cursor() as cursor:
+            # check username if exist
+            check_query = 'SELECT id, password_ciphertext, salt FROM user WHERE username = %s'
+            cursor.execute(check_query, (username,))
+            result = cursor.fetchone()
 
-    if name == 'admin' and password == 'password':
-        status = 'Success'
-
-    return jsonify({
-        'status': status,
-    })
+            # username not exist
+            if not result:
+                print(f'[Login] Error: Username does not exist')
+                return jsonify({
+                    'status': 'Error',
+                    'msg': 'Username does not exist',
+                })
+            
+            # username exist
+            id, password_ciphertext, salt = result
+            print(f'[Login] Find record: id = {id} username = {username} password_ciphertext = {password_ciphertext} salt = {salt}')
+            
+            # check password corraction
+            current_password_ciphertext = encrypt_password(password, salt)
+            if current_password_ciphertext != password_ciphertext:
+                print(f'[Login] Error: Password is not correct')
+                return jsonify({
+                    'status': 'Error',
+                    'msg': 'Password is not correct',
+                })
+            
+            return jsonify({
+                'status': 'Success',
+                'msg': 'Login successfully',
+            })
+        
+    except Exception as e:
+        print(f'[Sign up] Error: {e}')
+        return jsonify({
+            'status': 'Error',
+            'msg': f'Error: {e}',
+        })
+    
 
 @app.route('/sign_up', methods=['POST'])
 def sign_up():
+    print("----------[Sign up]----------")
     data = request.get_json()
 
     username = data.get('username')
@@ -52,14 +88,15 @@ def sign_up():
             result = cursor.fetchone()
 
             if result[0] > 0:
-                print(f'[Sign up] Error: User name is already existed')
+                print(f'[Sign up] Error: Username is already existed')
                 return jsonify({
                     'status': 'Error',
-                    'msg': 'User name is already existed',
+                    'msg': 'Username is already existed',
                 })
             else:
                 # insert
-                password_ciphertext, salt = encrypt_password(password)
+                salt = generate_salt()
+                password_ciphertext= encrypt_password(password, salt)
                 insert_query = 'INSERT INTO user (username, password_ciphertext, salt) VALUES (%s, %s, %s)'
                 cursor.execute(insert_query, (username, password_ciphertext, salt, ))
                 connection.commit()
@@ -84,12 +121,11 @@ def generate_salt(length=16):
     return salt
 
 # use salt to encrypt password
-def encrypt_password(password):
-    salt = generate_salt()
+def encrypt_password(password, salt):
     password_ciphertext = hashlib.pbkdf2_hmac('sha256', password.encode(), salt.encode(), 100000)
     # bin data to hex string
     password_ciphertext_hex = password_ciphertext.hex()
-    return password_ciphertext_hex, salt
+    return password_ciphertext_hex
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
