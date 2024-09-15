@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 import pymysql
 import random
@@ -15,8 +15,21 @@ connection = pymysql.connect(
     database='user_system'
 )
 
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/')
+def index():
+    return redirect(url_for('login_page'))
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/sign_up')
+def sign_up_page():
+    return render_template('sign_up.html')
+
+
+@app.route('/api/login', methods=['POST'])
+def login_api():
     print("----------[Login]----------")
     data = request.get_json()
 
@@ -47,7 +60,7 @@ def login():
             id, password_ciphertext, salt = result
             print(f'[Login] Find record: id = {id} username = {username} password_ciphertext = {password_ciphertext} salt = {salt}')
             
-            # check password corraction
+            # check password correction
             current_password_ciphertext = encrypt_password(password, salt)
             if current_password_ciphertext != password_ciphertext:
                 print(f'[Login] Error: Password is not correct')
@@ -69,8 +82,8 @@ def login():
         })
     
 
-@app.route('/sign_up', methods=['POST'])
-def sign_up():
+@app.route('/api/sign_up', methods=['POST'])
+def sign_up_api():
     print("----------[Sign up]----------")
     data = request.get_json()
 

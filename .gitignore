@@ -1,6 +1,2 @@
-*
-
-!backend.py
-!frontend.html
-!frontend.js
-!.gitignore
+__pycache__
+.DS_Store
