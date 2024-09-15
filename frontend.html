@@ -38,7 +38,7 @@
           height: 100vh;
         "
       >
-        <div class="card" style="width: 18rem">
+        <div id="loginPage" class="card" style="width: 18rem">
           <div class="card-body">
             <h5 id="title" class="card-title">Login</h5>
             <div class="mb-1">
@@ -73,10 +73,53 @@
             <div class="mt-3" style="text-align: center">
               <a
                 class="nav-link"
-                id="signUpChangeLayout"
+                id="changeLayoutToSignUp"
                 style="cursor: pointer; color: #5856cf; font-size: 13px"
               >
                 Sign up
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="signUpPage" class="card" style="width: 18rem; display: none">
+          <div class="card-body">
+            <h5 id="title" class="card-title">Sign up</h5>
+            <div class="mb-1">
+              <label for="signUpNameInput" class="form-label">User name</label>
+              <input class="form-control" id="signUpNameInput" />
+            </div>
+            <div class="mb-1">
+              <label for="signUpPasswordInput" class="form-label"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="signUpPasswordInput"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="signUpConfirmPasswordInput" class="form-label"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="signUpConfirmPasswordInput"
+              />
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+              <button id="signUpButton" class="btn btn-primary" type="submit">
+                Sign up
+              </button>
+            </div>
+            <div class="mt-3" style="text-align: center">
+              <a
+                class="nav-link"
+                id="changeLayoutToLogin"
+                style="cursor: pointer; color: #5856cf; font-size: 13px"
+              >
+                Login
               </a>
             </div>
           </div>

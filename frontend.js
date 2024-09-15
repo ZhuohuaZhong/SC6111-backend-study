@@ -25,8 +25,14 @@ $(document).ready(function () {
     });
   });
 
-  $("#signUpChangeLayout").click(function () {
-    $("#title").text("Sign");
+  $("#changeLayoutToSignUp").click(function () {
+    $("#loginPage").hide();
+    $("#signUpPage").show();
+  });
+
+  $("#changeLayoutToLogin").click(function () {
+    $("#loginPage").show();
+    $("#signUpPage").hide();
   });
   //   $("#signUpChangeLayout").click(function (){
 
