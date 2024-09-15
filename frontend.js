@@ -2,29 +2,40 @@ $(document).ready(function () {
   var baseUrl = "http://127.0.0.1:8080";
 
   $("#loginButton").click(function () {
-    var name = $("#loginNameInput").val();
+    var username = $("#loginNameInput").val();
     var password = $("#loginPasswordInput").val();
+    var isRemember = $("#loginRememberCheck").is(":checked");
 
-    console.log("Name: " + name);
-    console.log("Password: " + password);
+    console.log("[Login] username: " + username);
+    console.log("[Login] password: " + password);
+    console.log("[Login] remember: " + isRemember);
 
-    $.ajax({
-      url: baseUrl + "/login",
-      contentType: "application/json",
-      type: "POST",
-      data: JSON.stringify({
-        name: name,
-        password: password,
-      }),
-      success: function (response) {
-        alert("Response: " + response.status);
-        console.log("Response: ", response.status);
-      },
-      error: function (xhr, status, error) {
-        alert("Error:", error);
-        console.error("Error: ", error);
-      },
-    });
+    if (password == confirmPassword) {
+      $.ajax({
+        url: baseUrl + "/login",
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify({
+          username: username,
+          password: password,
+          isRember: isRemember,
+        }),
+        success: function (response) {
+          console.log("[Login] Response status: ", response.status);
+          console.log("[Login] Response msg: ", response.msg);
+          alert(response.status + ": " + response.msg);
+        },
+        error: function (error) {
+          console.error("[Login] Error: ", error);
+          alert("Error:", error);
+        },
+      });
+    } else {
+      console.log(
+        "[Sign up] The confirmation password does not match the original."
+      );
+      alert("The confirmation password does not match the original.");
+    }
   });
 
   $("#signUpButton").click(function () {
@@ -33,8 +44,8 @@ $(document).ready(function () {
     var confirmPassword = $("#signUpConfirmPasswordInput").val();
 
     console.log("[Sign up] username: " + username);
-    console.log("[Sign up] Password: " + password);
-    console.log("[Sign up] Confirm Password: " + confirmPassword);
+    console.log("[Sign up] password: " + password);
+    console.log("[Sign up] confirm password: " + confirmPassword);
 
     if (password == confirmPassword) {
       $.ajax({
