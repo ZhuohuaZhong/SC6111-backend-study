@@ -40,56 +40,49 @@
       >
         <div class="card" style="width: 18rem">
           <div class="card-body">
-            <h5 class="card-title">Login</h5>
-            <div class="input-group input-group" style="margin-top: 20px">
-              <span class="input-group-text" style="width: 100px">Name</span>
-              <input id="nameInput" type="text" class="form-control" />
+            <h5 id="title" class="card-title">Login</h5>
+            <div class="mb-1">
+              <label for="loginNameInput" class="form-label">User name</label>
+              <input class="form-control" id="loginNameInput" />
             </div>
-            <div class="input-group input-group" style="margin-top: 20px">
-              <span class="input-group-text" style="width: 100px"
-                >Password</span
+            <div class="mb-3">
+              <label for="loginPasswordInput" class="form-label"
+                >Password</label
               >
-              <input id="passwordInput" type="text" class="form-control" />
+              <input
+                type="password"
+                class="form-control"
+                id="loginPasswordInput"
+              />
+            </div>
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="loginRememberCheck"
+              />
+              <label class="form-check-label" for="loginRememberCheck"
+                >Remember me</label
+              >
             </div>
             <div style="text-align: center; margin-top: 30px">
               <button id="loginButton" class="btn btn-primary" type="submit">
                 Login
               </button>
             </div>
+            <div class="mt-3" style="text-align: center">
+              <a
+                class="nav-link"
+                id="signUpChangeLayout"
+                style="cursor: pointer; color: #5856cf; font-size: 13px"
+              >
+                Sign up
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </main>
-    <script src="index.js"></script>
+    <script src="frontend.js"></script>
   </body>
 </html>
-
-<script>
-  $(document).ready(function () {
-    $("#loginButton").click(function () {
-      var name = $("#nameInput").val();
-      var password = $("#passwordInput").val();
-
-      console.log("Name: " + name);
-      console.log("Password: " + password);
-
-      $.ajax({
-        url: "http://127.0.0.1:8080/login",
-        contentType: "application/json",
-        type: "POST",
-        data: JSON.stringify({
-          name: name,
-          password: password,
-        }),
-        success: function (response) {
-          alert("Response: " + response.status);
-          console.log("Response: ", response.status);
-        },
-        error: function (xhr, status, error) {
-          alert("Error:", error);
-          console.error("Error: ", error);
-        },
-      });
-    });
-  });
-</script>
