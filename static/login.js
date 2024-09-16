@@ -19,7 +19,7 @@ $(document).ready(function () {
       data: JSON.stringify({
         username: username,
         password: password,
-        isRember: isRemember,
+        isRemember: isRemember,
       }),
       success: function (response) {
         console.log("[Login] Response status: ", response.status);

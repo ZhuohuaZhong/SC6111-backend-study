@@ -4,11 +4,18 @@ import pymysql
 import random
 import string
 import hashlib
+from flask_session import Session
+from datetime import timedelta
+
 
 app = Flask(__name__)
 CORS(app)
 
-app.secret_key = 'aasdfasdfasdgsryukjytresdgjgjhrtd'
+# store session info on server side
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './flask_session'
+app.config['SESSION_PERMANENT'] = False  # default not permanent
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 connection = pymysql.connect(
     host='localhost',
@@ -17,9 +24,15 @@ connection = pymysql.connect(
     database='user_system'
 )
 
+# init server side session
+Session(app)
+
 @app.route('/')
 def index():
-    return redirect(url_for('login_page'))
+    if 'user_id' in session:
+        return redirect(url_for('welcome_page'))
+    else:
+        return redirect(url_for('login_page'))
 
 @app.route('/login')
 def login_page():
@@ -95,6 +108,14 @@ def login_api():
             
             # create session
             session['user_id'] = id
+
+            # set session expire
+            if isRemember:  
+                session.permanent = True
+                print(f'[Login] Set session permanent: True')
+            else:
+                session.permanent = False
+                print(f'Login] Set session permanent: False')
             
             return jsonify({
                 'status': 'Success',
@@ -141,7 +162,7 @@ def sign_up_api():
                 insert_query = 'INSERT INTO user (username, password_ciphertext, salt) VALUES (%s, %s, %s)'
                 cursor.execute(insert_query, (username, password_ciphertext, salt, ))
                 connection.commit()
-                
+
                 print(f'[Sign up] Sign up seccessfully: username = {username} password_ciphertext = {password_ciphertext} salt = {salt}')
                 return jsonify({
                     'status': 'Success',
@@ -156,7 +177,7 @@ def sign_up_api():
     
 @app.route('/api/log_out')
 def log_out_api():
-    session.pop('user_id', None)
+    session.clear()
     return redirect(url_for('login_page'))
 
 # generate different salt for each user
