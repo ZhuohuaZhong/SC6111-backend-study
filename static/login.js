@@ -25,6 +25,11 @@ $(document).ready(function () {
         console.log("[Login] Response status: ", response.status);
         console.log("[Login] Response msg: ", response.msg);
         alert(response.status + ": " + response.msg);
+
+        // if login success, redirect to welcome page
+        if (response.status == "Success") {
+          window.location.href = "/welcome";
+        }
       },
       error: function (error) {
         console.error("[Login] Frontend error: ", error);

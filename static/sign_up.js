@@ -27,7 +27,7 @@ $(document).ready(function () {
           console.log("[Sign up] Response msg: ", response.msg);
           alert(response.status + ": " + response.msg);
 
-          // if sign up success, redirect to login page and clear input in sign up page
+          // if sign up success, redirect to login page
           if (response.status == "Success") {
             window.location.href = "/login";
           }

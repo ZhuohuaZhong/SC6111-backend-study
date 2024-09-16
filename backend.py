@@ -8,6 +8,8 @@ import hashlib
 app = Flask(__name__)
 CORS(app)
 
+app.secret_key = 'aasdfasdfasdgsryukjytresdgjgjhrtd'
+
 connection = pymysql.connect(
     host='localhost',
     user='root',
@@ -26,6 +28,28 @@ def login_page():
 @app.route('/sign_up')
 def sign_up_page():
     return render_template('sign_up.html')
+
+@app.route('/welcome')
+def welcome_page():
+    print("----------[Welcome]----------")
+
+    # check login status
+    if 'user_id' in session:
+        user_id = session['user_id']
+        print(f'[Welcome] Find user_id {user_id} in session')
+        try:
+            with connection.cursor() as cursor:
+                # get username from db
+                get_username_query = 'SELECT username FROM user WHERE id = %s'
+                cursor.execute(get_username_query, (user_id,))
+                result = cursor.fetchone()
+                username = result[0]
+                print(f'[Welcome] Get username from DB by user_id, username: {username}')
+        except Exception as e:
+            print(f'[Welcome] Error: {e}')
+        return render_template('welcome.html', username = username)
+    else:
+        return redirect(url_for('login_page'))
 
 
 @app.route('/api/login', methods=['POST'])
@@ -69,6 +93,9 @@ def login_api():
                     'msg': 'Password is not correct',
                 })
             
+            # create session
+            session['user_id'] = id
+            
             return jsonify({
                 'status': 'Success',
                 'msg': 'Login successfully',
@@ -110,9 +137,11 @@ def sign_up_api():
                 # insert
                 salt = generate_salt()
                 password_ciphertext= encrypt_password(password, salt)
+
                 insert_query = 'INSERT INTO user (username, password_ciphertext, salt) VALUES (%s, %s, %s)'
                 cursor.execute(insert_query, (username, password_ciphertext, salt, ))
                 connection.commit()
+                
                 print(f'[Sign up] Sign up seccessfully: username = {username} password_ciphertext = {password_ciphertext} salt = {salt}')
                 return jsonify({
                     'status': 'Success',
@@ -124,6 +153,11 @@ def sign_up_api():
             'status': 'Error',
             'msg': f'Error: {e}',
         })
+    
+@app.route('/api/log_out')
+def log_out_api():
+    session.pop('user_id', None)
+    return redirect(url_for('login_page'))
 
 # generate different salt for each user
 def generate_salt(length=16):
