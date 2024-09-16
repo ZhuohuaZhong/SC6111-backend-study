@@ -29,11 +29,37 @@
   <body>
     <main>
       <div
+        id="networkWarn"
+        class="alert alert-warning"
+        role="alert"
+        style="height: 210px; padding-left: 80px; padding-right: 80px"
+      >
+        <h5>Zhong Zhuohua G2303463J</h5>
+        Git history:
+        <a
+          href="https://github.com/ZhuohuaZhong/SC6111-backend-study/commits/main/"
+          target="_blank"
+          style="cursor: pointer"
+          >https://github.com/ZhuohuaZhong/SC6111-backend-study/commits/main/</a
+        ><br />
+        <br />
+        Available funtions:<br />
+        <div style="column-count: 2; column-gap: 20px">
+          ✅ Register / Login with username and password<br />
+          ✅ Password stored as ciphertext (use salted hash password storage)<br />
+          ✅ Session on server side (stored in flask_session folder on
+          server)<br />
+          ✅ Logout function (clear session in Cookies)<br />
+          ✅ Login function (login status will expire after CLOSING BROWSER)<br />
+          ✅ "Remember me" function (can restored session after CLOSING BROWSER)
+        </div>
+      </div>
+      <div
         style="
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 100vh;
+          height: calc(80vh - 210px);
         "
       >
         <div class="card" style="width: 18rem">
