@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
+from flask_session import Session
 import pymysql
 import random
 import string
 import hashlib
-from flask_session import Session
 from datetime import timedelta
 
 

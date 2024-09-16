@@ -29,10 +29,9 @@
   <body>
     <main>
       <div
-        id="networkWarn"
         class="alert alert-warning"
         role="alert"
-        style="height: 210px; padding-left: 80px; padding-right: 80px"
+        style="height: 240px; padding-left: 80px; padding-right: 80px"
       >
         <h5>Zhong Zhuohua G2303463J</h5>
         Git history:
@@ -50,19 +49,21 @@
           ✅ Session on server side (stored in flask_session folder on
           server)<br />
           ✅ Logout function (clear session in Cookies)<br />
-          ✅ Login function (login status will expire after CLOSING BROWSER)<br />
-          ✅ "Remember me" function (can restored session after CLOSING BROWSER)
+          ✅ Login function (create TEMPORARY session, login status will expire
+          after CLOSING BROWSER)<br />
+          ✅ "Remember me" function (create PERMANENT session, login status can
+          be restored after CLOSING BROWSER)
         </div>
       </div>
       <div
         style="
           display: flex;
           justify-content: center;
-          align-items: center;
+          align-items: flex-start;
           height: calc(80vh - 210px);
         "
       >
-        <div class="card" style="width: 18rem">
+        <div class="card" style="width: 18rem; margin-top: 60px">
           <div class="card-body">
             <h5 id="title" class="card-title">Welcome {{username}} !</h5>
             <div style="text-align: center; margin-top: 30px">
